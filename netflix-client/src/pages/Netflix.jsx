@@ -6,23 +6,31 @@ import { FaPlay } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { getGenres } from "../store";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchmovies, getGenres } from "../store";
+import Slider from "../components/Slider";
 
 export default function Netflix() {
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
+  const genresLoaded = useSelector((state) => state.netflix.genresLoaded);
+  const movies = useSelector((state) => state.netflix.movies);
+  // console.log(movies);
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getGenres());
   }, []);
 
+  useEffect(() => {
+    if (genresLoaded) {
+      dispatch(fetchmovies({ type: "all" }));
+    }
+  });
   window.onscroll = () => {
     setIsScrolled(window.scrollY === 0 ? false : true);
     return () => (window.onscroll = null);
   };
-
   return (
     <Container>
       <Navbar isScrolled={isScrolled} />
@@ -30,7 +38,7 @@ export default function Netflix() {
         <img
           src={backgroundImage}
           alt="background"
-          className="backgroundImage-image"
+          className="background-image"
         />
         <div className="container">
           <div className="logo">
@@ -49,14 +57,15 @@ export default function Netflix() {
           </div>
         </div>
       </div>
+      <Slider movies={movies} />
     </Container>
   );
 }
 const Container = styled.div`
-  background-color: black;
+    background-color: black;
   .hero {
     position: relative;
-    background-image: {
+    .background-image {
       filter: brightness(60%);
     }
     img {
@@ -85,12 +94,12 @@ const Container = styled.div`
           padding-right: 2.4rem;
           border: none;
           cursor: pointer;
-          transition: 0.3s ease-in-out;
+          transition: 0.2s ease-in-out;
           &:hover {
             opacity: 0.8;
           }
           &:nth-of-type(2) {
-            background-color: rgba(109, 109, 109, 0.7);
+            background-color: rgba(109, 109, 110, 0.7);
             color: white;
             svg {
               font-size: 1.8rem;
