@@ -16,6 +16,7 @@ mongoose
   .catch((error) => console.log("error" + error.message));
 
 app.use("/api/user", userRoutes);
+app.use(express.static("../netflix-client/build"));
 
 app.listen(port, () => {
   console.log(`Server is started and running on port ${port}`);

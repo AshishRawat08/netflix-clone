@@ -80,7 +80,7 @@ module.exports.removeFromLikedMovies = async (req, res) => {
       }
       likedMovies.splice(movieIndex, 1);
 
-      // Update the user's likedMovies array in the database
+      
       await User.findByIdAndUpdate(
         user._id,
         {
@@ -89,15 +89,15 @@ module.exports.removeFromLikedMovies = async (req, res) => {
         { new: true }
       );
 
-      // Send response indicating successful deletion
+     
       return res.json({ msg: "Movie deleted from liked list", movies: likedMovies });
     } else {
-      // Send response if user is not found
+      
       return res.status(400).json({ msg: "User not found" });
     }
   } catch (error) {
     console.log(error);
-    // Send response for any other errors that occur during the process
+    
     return res.status(500).json({
       msg: "Error deleting liked movie",
     });
