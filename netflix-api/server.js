@@ -1,4 +1,6 @@
 const express = require("express");
+require("dotenv").config();
+
 const cors = require("cors");
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/UserRoutes");
@@ -6,10 +8,11 @@ const userRoutes = require("./routes/UserRoutes");
 const app = express();
 app.use(cors());
 app.use(express.json());
-const port = 5000;
+const port = process.env.PORT || 5000;
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/netflix"; 
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/netflix")
+  .connect(MONGODB_URI) 
   .then(() => {
     console.log("Database connected");
   })
